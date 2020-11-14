@@ -1,11 +1,16 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route, Link, useParams } from 'react-router-dom'
-//import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Switch, Route, Link, useParams, useHistory } from 'react-router-dom'
 
-const Menu = ({ addNew, anecdotes, anecdoteById }) => {
+const Menu = ({ addNew, anecdotes, anecdoteById, notification }) => {
   const padding = {
     paddingRight: 5
   }
+  const notificationStyle = {
+    padding: 5,
+    marginTop: 5,
+    border: '1px solid red'
+  }
+
   return (
     <Router>
       <div>
@@ -13,7 +18,9 @@ const Menu = ({ addNew, anecdotes, anecdoteById }) => {
         <Link style={padding} to='/create'>create new</Link>
         <Link style={padding} to='/about'>about</Link>
       </div>
-
+      {notification &&
+        <div style={notificationStyle}>{notification}</div>
+      }
       <Switch>
         <Route path='/create'>
           <CreateNew addNew={addNew}/>
@@ -87,6 +94,7 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
 
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -96,6 +104,7 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
   }
 
   return (
@@ -122,6 +131,7 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
+  
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -144,6 +154,10 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`a new anecdote ${anecdote.content} created!`)
+    setTimeout(() => {
+      setNotification('')
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -164,7 +178,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu addNew={addNew} anecdotes={anecdotes} 
-      anecdoteById={anecdoteById}/>
+      anecdoteById={anecdoteById} notification={notification}/>
       <Footer />
     </div>
   )
