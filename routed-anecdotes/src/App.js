@@ -108,10 +108,11 @@ const CreateNew = (props) => {
     history.push('/')
   }
 
-  const handleReset = () => {
-   content.reset()
-   author.reset()
-   info.reset()
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.resetObject.reset()
+    author.resetObject.reset()
+    info.resetObject.reset()
   }
 
   return (
