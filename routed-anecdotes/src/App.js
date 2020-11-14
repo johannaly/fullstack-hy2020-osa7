@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route, Link, useParams, useHistory } from 'react-router-dom'
+import { useField } from './hooks'
 
 const Menu = ({ addNew, anecdotes, anecdoteById, notification }) => {
   const padding = {
@@ -23,7 +24,7 @@ const Menu = ({ addNew, anecdotes, anecdoteById, notification }) => {
       }
       <Switch>
         <Route path='/create'>
-          <CreateNew addNew={addNew}/>
+          <CreateNew addNew={addNew} />
         </Route>
 
         <Route path='/about'>
@@ -31,7 +32,7 @@ const Menu = ({ addNew, anecdotes, anecdoteById, notification }) => {
         </Route>
 
         <Route path='/anecdotes/:id'>
-          <Anecdote anecdotes={anecdotes} anecdoteById={anecdoteById}/>
+          <Anecdote anecdotes={anecdotes} anecdoteById={anecdoteById} />
         </Route>
 
         <Route path='/'>
@@ -42,10 +43,10 @@ const Menu = ({ addNew, anecdotes, anecdoteById, notification }) => {
   )
 }
 
-const Anecdote = ({ anecdotes, anecdoteById }) => {
+const Anecdote = ({ anecdoteById }) => {
   const id = useParams().id
   const anecdote = anecdoteById(id)
-  return(
+  return (
     <div>
       <h2>{`${anecdote.content} by ${anecdote.author}`}</h2>
       <div>{`has ${anecdote.votes} votes`}</div>
@@ -59,10 +60,10 @@ const AnecdoteList = ({ anecdotes }) => (
     <h2>Anecdotes</h2>
     <ul>
       {anecdotes
-      .map(anecdote =>
-        <li key={anecdote.id} >
-          <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
-        </li>)}
+        .map(anecdote =>
+          <li key={anecdote.id} >
+            <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+          </li>)}
     </ul>
   </div>
 )
@@ -90,18 +91,18 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const content = useField('text')
+  const author = useField('text')
+  const info = useField('text')
 
   const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     history.push('/')
@@ -113,15 +114,15 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e) => setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
       </form>
@@ -131,7 +132,7 @@ const CreateNew = (props) => {
 }
 
 const App = () => {
-  
+
   const [anecdotes, setAnecdotes] = useState([
     {
       content: 'If it hurts, do it more often',
@@ -177,8 +178,8 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu addNew={addNew} anecdotes={anecdotes} 
-      anecdoteById={anecdoteById} notification={notification}/>
+      <Menu addNew={addNew} anecdotes={anecdotes}
+        anecdoteById={anecdoteById} notification={notification} />
       <Footer />
     </div>
   )
