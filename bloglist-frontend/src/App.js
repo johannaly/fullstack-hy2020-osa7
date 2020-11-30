@@ -8,29 +8,28 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { addNotification } from './reducers/notificationReducer'
+import { createNewBlog, initializeBlogs } from './reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
 
 
 const App = () => {
   const dispatch = useDispatch()
-  const notification = useSelector(state => state)
-  const [blogs, setBlogs] = useState([])
+  const notification = useSelector(state => state.notification)
+  const blogs = useSelector(state => state.blogs)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
 
-  console.log('notification', notification)
-  console.log('user', user)
+  //console.log('notification', notification)
+  //console.log('user', user)
 
   useEffect(() => {
-    blogService
-      .getAll()
-      .then(blogs =>
-        setBlogs(blogs)
-      )
-  }, [])
+        dispatch(initializeBlogs())
+  }, [dispatch])
 
+  //console.log(store.getState())
+  
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -108,22 +107,20 @@ const App = () => {
 
   const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    const returnedBlog = await blogService.create(blogObject)
-    const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs)
-    dispatch(addNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, false, 5))
+    dispatch(createNewBlog(blogObject))
+    dispatch(addNotification(`a new blog ${blogObject.title} by ${blogObject.author} added`, false, 5))
   }
 
   const addLike = async (blogToModify) => {
     await blogService.modifyBlog(blogToModify)
     const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs)
+    dispatch(initializeBlogs(updatedBlogs))
   }
 
   const deleteBlog = async (id) => {
     await blogService.deleteBlog(id)
     const updatedBlogs = await blogService.getAll()
-    setBlogs(updatedBlogs)
+    dispatch(initializeBlogs(updatedBlogs))
   }
 
   if (user === null && notification === '') {
@@ -137,7 +134,7 @@ const App = () => {
       </div>
     )
   } else if (user === null && notification !== '') {
-    console.log(notification)
+    //console.log(notification)
     return (
       <div>
         <h2>Blogs</h2>

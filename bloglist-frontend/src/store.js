@@ -1,15 +1,16 @@
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import notificationReducer from './reducers/notificationReducer'
+import rootReducer from './reducers/rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
+
 const store = createStore(
-    notificationReducer,
+    rootReducer,
     composeWithDevTools(
         applyMiddleware(thunk)
     )
 )
 
-console.log(store.getState())
+//console.log(store.getState())
 
 export default store
