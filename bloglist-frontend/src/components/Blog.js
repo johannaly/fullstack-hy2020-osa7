@@ -13,9 +13,7 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
     borderWidth: 1,
     marginBottom: 5
   }
-  const buttonStyle = {
-    marginRight: 5
-  }
+  
 
   const blueButtonStyle = {
     backgroundColor: 'lightblue'
