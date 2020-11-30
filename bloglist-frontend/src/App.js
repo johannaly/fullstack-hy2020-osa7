@@ -9,6 +9,7 @@ import Togglable from './components/Togglable'
 import { addNotification } from './reducers/notificationReducer'
 import { createNewBlog, initializeBlogs, addNewLike, removeBlog } from './reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
+import { Form, Button } from 'react-bootstrap'
 
 
 const App = () => {
@@ -79,29 +80,31 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
+    <div className='container'>
+    <Form onSubmit={handleLogin}>
+      <Form.Group>
+      <Form.Label>username</Form.Label>
+        <Form.Control
           id="username"
           type="text"
           value={username}
           name="Username"
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        password
-        <input
+     
+      <Form.Label>password</Form.Label>
+        <Form.Control
           id='password'
           type="text"
           value={password}
           name="Password"
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button id="login-button" type='submit'>login</button>
-    </form>
+    
+      <Button variant = 'primary' id="login-button" type='submit'>login</Button>
+    </Form.Group>
+    </Form>
+    </div>
   )
 
   const addBlog = async (blogObject) => {
@@ -120,7 +123,7 @@ const App = () => {
 
   if (user === null && notification === '') {
     return (
-      <div>
+      <div className='container'>
         <h2>Blogs</h2>
         <h2>Log in to application</h2>
         <div>
@@ -131,7 +134,7 @@ const App = () => {
   } else if (user === null && notification !== '') {
     //console.log(notification)
     return (
-      <div>
+      <div className="container">
         <h2>Blogs</h2>
         <Notification />
         <h2>Log in to application</h2>
@@ -142,11 +145,11 @@ const App = () => {
     )
   }
   return (
-    <div>
+    <div className='container'>
       <h2>Blogs</h2>
       <Notification />
       <p>{user.name} logged in</p>
-      <button id='logout-button' onClick={handleLogout}>logout</button>
+      <Button variant='primary' id='logout-button' onClick={handleLogout}>logout</Button>
 
       <Togglable buttonLabel = 'create new blog' ref = {blogFormRef}>
         <BlogForm

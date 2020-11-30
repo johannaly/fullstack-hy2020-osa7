@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button } from 'react-bootstrap'
 
 const Blog = ({ blog, addLike, deleteBlog, user }) => {
   const [visible, setVisible] = useState(false)
@@ -58,7 +59,7 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
         <div>
           <p>
             {blog.title} {blog.author}
-            <button style = {buttonStyle} onClick= {toggleVisible}>{buttonText}</button>
+            <Button variant='primary' onClick= {toggleVisible}>{buttonText}</Button>
           </p>
         </div>
       </div>
@@ -70,12 +71,12 @@ const Blog = ({ blog, addLike, deleteBlog, user }) => {
       <div>
         <p>
           {blog.title} {blog.author}
-          <button style = {buttonStyle} onClick= {toggleVisible}>{buttonText}</button>
+          <Button variant='primary' onClick= {toggleVisible}>{buttonText}</Button>
         </p>
         <p>{blog.url}</p>
         <p className='likes'>
           {blog.likes}
-          <button style= {buttonStyle} onClick= {handleLike}>like</button>
+          <Button variant='primary' onClick= {handleLike}>like</Button>
         </p>
         {blog.user.id === user.id &&
           <p>
