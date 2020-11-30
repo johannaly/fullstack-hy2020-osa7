@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-//import axios from 'axios'
 import './App.css'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
@@ -8,7 +7,7 @@ import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import { addNotification } from './reducers/notificationReducer'
-import { createNewBlog, initializeBlogs } from './reducers/blogReducer'
+import { createNewBlog, initializeBlogs, addNewLike, removeBlog } from './reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
 
 
@@ -112,15 +111,11 @@ const App = () => {
   }
 
   const addLike = async (blogToModify) => {
-    await blogService.modifyBlog(blogToModify)
-    const updatedBlogs = await blogService.getAll()
-    dispatch(initializeBlogs(updatedBlogs))
+    dispatch(addNewLike(blogToModify))
   }
 
   const deleteBlog = async (id) => {
-    await blogService.deleteBlog(id)
-    const updatedBlogs = await blogService.getAll()
-    dispatch(initializeBlogs(updatedBlogs))
+    dispatch(removeBlog(id))
   }
 
   if (user === null && notification === '') {
