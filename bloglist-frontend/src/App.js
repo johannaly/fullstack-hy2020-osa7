@@ -11,7 +11,6 @@ import { createNewBlog, initializeBlogs, addNewLike, removeBlog } from './reduce
 import { useSelector, useDispatch } from 'react-redux'
 import { Form, Button } from 'react-bootstrap'
 
-
 const App = () => {
   const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
@@ -20,15 +19,12 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
-
-  //console.log('notification', notification)
-  //console.log('user', user)
+  
 
   useEffect(() => {
         dispatch(initializeBlogs())
   }, [dispatch])
 
-  //console.log(store.getState())
   
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -54,13 +50,11 @@ const App = () => {
           'loggedBlogappUser', JSON.stringify(user)
         )
         blogService.setToken(user.token)
-        //setUser(user)
         setUsername('')
         setPassword('')
         dispatch(addNotification(`${username} logged in`, false, 5))
 
       } else {
-        //console.log("else: " + user)
         setUsername('')
         setPassword('')
         dispatch(addNotification('wrong username or password', true, 5))
@@ -132,7 +126,6 @@ const App = () => {
       </div>
     )
   } else if (user === null && notification !== '') {
-    //console.log(notification)
     return (
       <div className="container">
         <h2>Blogs</h2>
